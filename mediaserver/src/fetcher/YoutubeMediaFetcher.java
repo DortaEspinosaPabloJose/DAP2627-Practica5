@@ -5,11 +5,11 @@ import java.net.URL;
 import com.github.axet.vget.VGet;
 import java.util.Objects;
 
-public class YoutubeVideoFetcher implements VideoFetcher{
+public class YoutubeMediaFetcher implements MediaFetcher {
     String url;
     String destinationPath;
 
-    public YoutubeVideoFetcher(String url, String destinationPath){
+    public YoutubeMediaFetcher(String url, String destinationPath){
         this.url = url;
         this.destinationPath = destinationPath;
     }
@@ -24,19 +24,19 @@ public class YoutubeVideoFetcher implements VideoFetcher{
     }
 
     @Override
-    public File getVideo() {
+    public File getMedia() {
         downloadVideo();
 
         File file = new File(Objects.requireNonNull(destinationPath, "path no puede ser null"));
 
         if (!file.exists()) {
-            throw new VideoFetchException("El fichero no existe: " + file.getAbsolutePath());
+            throw new MediaFetchException("El fichero no existe: " + file.getAbsolutePath());
         }
         if (!file.isFile()) {
-            throw new VideoFetchException("La ruta no es un fichero: " + file.getAbsolutePath());
+            throw new MediaFetchException("La ruta no es un fichero: " + file.getAbsolutePath());
         }
         if (!file.canRead()) {
-            throw new VideoFetchException("No hay permisos de lectura: " + file.getAbsolutePath());
+            throw new MediaFetchException("No hay permisos de lectura: " + file.getAbsolutePath());
         }
         return file;
     }

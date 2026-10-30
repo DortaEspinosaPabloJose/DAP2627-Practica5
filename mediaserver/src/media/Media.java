@@ -1,8 +1,8 @@
-package video;
+package media;
 
 import java.io.File;
 
-public class Video{
+public class Media {
     File video;
 
 }

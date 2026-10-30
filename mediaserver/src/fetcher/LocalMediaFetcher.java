@@ -6,28 +6,28 @@ import java.util.Objects;
 /**
  * recupera un vídeo ya existente en el sistema de ficheros local.
  */
-public class LocalVideoFetcher implements VideoFetcher {
+public class LocalMediaFetcher implements MediaFetcher {
 
     private final File file;
 
-    public LocalVideoFetcher(String path) {
+    public LocalMediaFetcher(String path) {
         this(new File(Objects.requireNonNull(path, "path no puede ser null")));
     }
 
-    public LocalVideoFetcher(File file) {
+    public LocalMediaFetcher(File file) {
         this.file = Objects.requireNonNull(file, "file no puede ser null");
     }
 
     @Override
-    public File getVideo() {
+    public File getMedia() {
         if (!file.exists()) {
-            throw new VideoFetchException("El fichero no existe: " + file.getAbsolutePath());
+            throw new MediaFetchException("El fichero no existe: " + file.getAbsolutePath());
         }
         if (!file.isFile()) {
-            throw new VideoFetchException("La ruta no es un fichero: " + file.getAbsolutePath());
+            throw new MediaFetchException("La ruta no es un fichero: " + file.getAbsolutePath());
         }
         if (!file.canRead()) {
-            throw new VideoFetchException("No hay permisos de lectura: " + file.getAbsolutePath());
+            throw new MediaFetchException("No hay permisos de lectura: " + file.getAbsolutePath());
         }
         return file;
     }

@@ -1,7 +1,7 @@
-package video.videoplayer;
+package media.player;
 
 import java.io.File;
 
-public interface VideoPlayer {
+public interface MediaPlayer {
     public void play(File video);
 }
