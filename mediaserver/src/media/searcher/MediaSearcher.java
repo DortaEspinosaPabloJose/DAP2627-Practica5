@@ -4,6 +4,6 @@ import java.io.File;
 import java.util.List;
 
 public interface MediaSearcher {
-    public List<String> search(String search); // devuelve una lista de titulos
-    public File select(String name); // devuelve el fichero especifico
+    List<String> search(String query); // Devuelve una lista de títulos encontrados
+    File select(String name);          // Devuelve el fichero específico seleccionado
 }

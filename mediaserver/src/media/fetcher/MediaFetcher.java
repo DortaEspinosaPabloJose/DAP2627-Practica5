@@ -1,7 +1,7 @@
-package fetcher;
+package media.fetcher;
 
 import java.io.File;
 
 public interface MediaFetcher {
-    public File getMedia();
+    File getMedia();
 }

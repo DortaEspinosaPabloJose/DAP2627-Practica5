@@ -1,13 +1,9 @@
-package fetcher;
+package media.fetcher;
 
 import java.io.File;
 import java.util.Objects;
 
-/**
- * recupera un vídeo ya existente en el sistema de ficheros local.
- */
 public class LocalMediaFetcher implements MediaFetcher {
-
     private final File file;
 
     public LocalMediaFetcher(String path) {
