@@ -1,4 +1,8 @@
-package media.fetcher;
+package media.fetcher.yt;
+
+import media.fetcher.MediaFetchException;
+import media.fetcher.MediaFetcher;
+import media.fetcher.MediaFormat;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,7 +21,7 @@ public class YoutubeMediaFetcher implements MediaFetcher {
     private final MediaFormat format;
     private final Logger logger = Logger.getLogger("YoutubeFetcher");
 
-    /** Defaults to MP3 to keep the old behaviour. */
+    /** Defaults to MP4 to keep the old behaviour. */
     public YoutubeMediaFetcher(String url, String destinationDir) {
         this(url, destinationDir, MediaFormat.MP4);
     }
