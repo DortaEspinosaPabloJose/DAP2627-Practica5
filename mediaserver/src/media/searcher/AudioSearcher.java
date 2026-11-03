@@ -7,6 +7,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.SequencedCollection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import media.fetcher.LocalMediaFetcher;
@@ -20,8 +23,20 @@ public class AudioSearcher implements MediaSearcher {
 
     private final File directory;
 
+    private final Logger logger = Logger.getLogger("AudioSearcherLog");
+
     public AudioSearcher(File directory) {
         this.directory = Objects.requireNonNull(directory, "directory no puede ser null");
+
+        try (Stream<Path> paths = Files.walk(directory.toPath())) {
+            List<String> found = paths
+                    .filter(Files::isRegularFile)
+                    .map(p -> p.getFileName().toString())
+                    .toList();
+            logger.log(Level.INFO, "AudioSearcher files in directory (" + directory.getAbsolutePath() + ") found: " + found);
+        } catch (IOException e) {
+            throw new MediaFetchException("Error al buscar en: " + directory.getAbsolutePath(), e);
+        }
     }
 
     public AudioSearcher(String directoryPath) {
@@ -35,7 +50,7 @@ public class AudioSearcher implements MediaSearcher {
         String needle = query.toLowerCase(Locale.ROOT);
 
         try (Stream<Path> paths = Files.walk(directory.toPath())) {
-            return paths
+            List<String> found = paths
                     .filter(Files::isRegularFile)
                     .map(p -> p.getFileName().toString())
                     .filter(n -> n.toLowerCase(Locale.ROOT).endsWith(EXTENSION))
@@ -43,6 +58,8 @@ public class AudioSearcher implements MediaSearcher {
                     .filter(title -> title.toLowerCase(Locale.ROOT).contains(needle))
                     .sorted()
                     .toList();
+            logger.log(Level.INFO, "Query: " + query + " needle: " + needle + " found: " + found);
+            return found;
         } catch (IOException e) {
             throw new MediaFetchException("Error al buscar en: " + directory.getAbsolutePath(), e);
         }
@@ -69,6 +86,26 @@ public class AudioSearcher implements MediaSearcher {
         }
     }
 
+
+    private List<String> localAudioSearch(String query){
+        Objects.requireNonNull(query, "query no puede ser null");
+        String needle = query.toLowerCase(Locale.ROOT);
+
+        try (Stream<Path> paths = Files.walk(directory.toPath())) {
+            List<String> found = paths
+                    .filter(Files::isRegularFile)
+                    .map(p -> p.getFileName().toString())
+                    .filter(n -> n.toLowerCase(Locale.ROOT).endsWith(EXTENSION))
+                    .map(AudioSearcher::stripExtension)
+                    .filter(title -> title.toLowerCase(Locale.ROOT).contains(needle))
+                    .sorted()
+                    .toList();
+            logger.log(Level.INFO, "Query: " + query + " needle: " + needle + " found: " + found);
+            return found;
+        } catch (IOException e) {
+            throw new MediaFetchException("Error al buscar en: " + directory.getAbsolutePath(), e);
+        }
+    }
     private static String stripExtension(String fileName) {
         return fileName.substring(0, fileName.length() - EXTENSION.length());
     }
