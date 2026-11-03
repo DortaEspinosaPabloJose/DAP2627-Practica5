@@ -1,8 +1,10 @@
+import media.factory.AudioFactory;
 import media.factory.MediaFactory;
 import media.player.MediaPlayer;
 import media.searcher.MediaSearcher;
 
 import javax.swing.*;
+import java.util.List;
 import java.awt.*;
 import java.io.File;
 
@@ -74,11 +76,11 @@ public class Main extends JFrame {
             String source = (String) comboSource.getSelectedItem();
 
             // TODO:
-            // if (format.equals("Vídeo")) { activeFactory = new VideoFactory(source); }
-            // else { activeFactory = new AudioFactory(source); }
+            //if (format.equals("Vídeo")) { activeFactory = new VideoFactory(source); }
+             activeFactory = new AudioFactory("home/suko/Audios/");
 
-            // activeSearcher = activeFactory.createSearcher();
-            // List<String> results = activeSearcher.search(searchField.getText());
+            activeSearcher = activeFactory.createSearcher();
+            List<String> results = activeSearcher.search(searchField.getText());
             // actualizar listModel con results...
         });
 
@@ -86,9 +88,9 @@ public class Main extends JFrame {
             String selected = resultList.getSelectedValue();
             if (selected != null && activeFactory != null) {
                 // TODO:
-                // File mediaFile = activeSearcher.select(selected);
-                // activePlayer = activeFactory.createPlayer();
-                // activePlayer.play(mediaFile);
+                File mediaFile = activeSearcher.select(selected);
+                activePlayer = activeFactory.createPlayer();
+                activePlayer.play(mediaFile);
                 statusLabel.setText("Reproduciendo: " + selected);
             }
         });
