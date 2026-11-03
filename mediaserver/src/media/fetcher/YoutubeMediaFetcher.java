@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -13,11 +14,43 @@ import java.util.logging.Logger;
 public class YoutubeMediaFetcher implements MediaFetcher {
     private final String url;
     private final File destinationDir;
+    private final MediaFormat format;
     private final Logger logger = Logger.getLogger("YoutubeFetcher");
 
+    /** Defaults to MP3 to keep the old behaviour. */
     public YoutubeMediaFetcher(String url, String destinationDir) {
+        this(url, destinationDir, MediaFormat.MP4);
+    }
+
+    public YoutubeMediaFetcher(String url, String destinationDir, MediaFormat format) {
         this.url = Objects.requireNonNull(url, "url no puede ser null");
         this.destinationDir = new File(Objects.requireNonNull(destinationDir, "destinationDir no puede ser null"));
+        this.format = Objects.requireNonNull(format, "format no puede ser null");
+    }
+
+    private List<String> buildCommand() {
+        List<String> cmd = new ArrayList<>();
+        cmd.add("yt-dlp");
+        cmd.add("--no-playlist");
+
+        if (format.isAudioOnly()) {
+            cmd.add("-x");
+            cmd.add("--audio-format");
+            cmd.add(format.extension());          // wav or mp3
+        } else {
+            cmd.add("-f");
+            cmd.add("bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b");
+            cmd.add("--merge-output-format");
+            cmd.add(format.extension());          // mp4
+        }
+
+        cmd.add("-o");
+        cmd.add(new File(destinationDir, "%(title)s.%(ext)s").getAbsolutePath());
+        cmd.add("--print");
+        cmd.add("after_move:filepath");
+        cmd.add("--no-simulate");
+        cmd.add(url);
+        return cmd;
     }
 
     @Override
@@ -26,19 +59,11 @@ public class YoutubeMediaFetcher implements MediaFetcher {
             throw new MediaFetchException("No se pudo crear el directorio: " + destinationDir.getAbsolutePath());
         }
 
-        List<String> cmd = List.of(
-                "yt-dlp",
-                "-x", "--audio-format", "mp3",          // needs ffmpeg installed
-                "--no-playlist",
-                "-o", new File(destinationDir, "%(title)s.%(ext)s").getAbsolutePath(),
-                "--print", "after_move:filepath",        // prints final path to stdout
-                "--no-simulate",
-                url);
-
+        List<String> cmd = buildCommand();
         logger.log(Level.INFO, "Running: " + String.join(" ", cmd));
 
         try {
-            Process p = new ProcessBuilder(cmd).redirectErrorStream(false).start();
+            Process p = new ProcessBuilder(cmd).start();
 
             String lastLine = null;
             try (BufferedReader out = new BufferedReader(
