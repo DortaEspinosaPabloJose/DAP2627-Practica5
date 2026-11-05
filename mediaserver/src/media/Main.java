@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 
+import media.factory.AudioFactory;
 import media.fetcher.MediaFetchException;
-import media.searcher.AudioSearcher;
 import media.searcher.MediaSearcher;
 
 // main que solo prueba la parte de audio
@@ -28,7 +28,7 @@ public class Main {
             System.out.print("Fuente (1 = Local, 2 = YouTube): ");
             String source = in.nextLine().trim().equals("2") ? YOUTUBE : LOCAL;
 
-            MediaSearcher searcher = new AudioSearcher(source, dir);
+            MediaSearcher searcher = new AudioFactory(source.equals(LOCAL), dir).createSearcher();
 
             while (true) {
                 System.out.print("\nBúsqueda (vacío para salir): ");

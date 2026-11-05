@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.util.List;
 import java.awt.*;
 import java.io.File;
+import java.util.Objects;
 
 public class Main extends JFrame {
 
@@ -76,8 +77,8 @@ public class Main extends JFrame {
             String source = (String) comboSource.getSelectedItem();
 
             // TODO: implementar videofactory
-            if (format.equals("Vídeo")) { activeFactory = new AudioFactory(source); }
-            else activeFactory = new AudioFactory(source);
+            if (format.equals("Audio")) { activeFactory = new AudioFactory(Objects.equals(source, "Local")); }
+            // else activeFactory = new AudioFactory(source);
 
             activeSearcher = activeFactory.createSearcher();
             List<String> results = activeSearcher.search(searchField.getText());
