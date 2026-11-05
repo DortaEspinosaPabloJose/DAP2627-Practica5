@@ -21,7 +21,6 @@ public class YoutubeMediaFetcher implements MediaFetcher {
     private final MediaFormat format;
     private final Logger logger = Logger.getLogger("YoutubeFetcher");
 
-    /** Defaults to MP4 to keep the old behaviour. */
     public YoutubeMediaFetcher(String url, String destinationDir) {
         this(url, destinationDir, MediaFormat.MP4);
     }

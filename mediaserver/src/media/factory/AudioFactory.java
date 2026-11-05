@@ -9,6 +9,8 @@ import media.searcher.MediaSearcher;
 import media.searcher.audio.YoutubeAudioSearcher;
 import media.searcher.audio.LocalAudioSearcher;
 import media.searcher.audio.LocalAudioSearcher;
+import media.searcher.video.LocalVideoSearcher;
+import media.searcher.video.YoutubeVideoSearcher;
 
 
 /**
@@ -34,8 +36,11 @@ public class AudioFactory implements MediaFactory {
 
     @Override
     public MediaSearcher createSearcher() {
-        if(this.isLocalMode) return new LocalAudioSearcher(directory);
-        return new YoutubeAudioSearcher(directory);
+        if (isLocalMode) {
+            return new LocalAudioSearcher(directory);
+        } else {
+            return new YoutubeAudioSearcher(directory);
+        }
     }
 
     @Override
