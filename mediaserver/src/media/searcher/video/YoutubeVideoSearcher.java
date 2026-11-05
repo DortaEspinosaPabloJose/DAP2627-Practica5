@@ -1,4 +1,4 @@
-package media.searcher;
+package media.searcher.video;
 
 import java.io.File;
 import java.util.List;
@@ -11,6 +11,7 @@ import media.fetcher.MediaFormat;
 import media.fetcher.yt.YoutubeMediaFetcher;
 import media.fetcher.yt.YoutubeSearch;
 import media.fetcher.yt.YoutubeSearchResult;
+import media.searcher.MediaSearcher;
 
 /**
  * Buscador de vídeos en YouTube y descargador a un directorio local.

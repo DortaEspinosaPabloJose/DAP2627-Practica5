@@ -1,4 +1,4 @@
-package media.searcher;
+package media.searcher.video;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import media.fetcher.LocalMediaFetcher;
 import media.fetcher.MediaFetchException;
+import media.searcher.MediaSearcher;
 
 /**
  * Buscador de vídeos locales (MP4) dentro del directorio de descargas.

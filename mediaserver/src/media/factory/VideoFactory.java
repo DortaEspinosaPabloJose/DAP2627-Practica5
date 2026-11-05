@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 
 import media.player.MediaPlayer;
 import media.player.VideoPlayer;
-import media.searcher.LocalVideoSearcher;
+import media.searcher.video.LocalVideoSearcher;
 import media.searcher.MediaSearcher;
-import media.searcher.YoutubeVideoSearcher;
+import media.searcher.video.YoutubeVideoSearcher;
 
 public class VideoFactory implements MediaFactory {
     private final File directory;
