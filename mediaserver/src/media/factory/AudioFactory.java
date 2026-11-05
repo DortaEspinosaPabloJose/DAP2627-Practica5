@@ -9,22 +9,21 @@ import media.searcher.AudioSearcher;
 import media.searcher.MediaSearcher;
 
 /**
- * Fábrica concreta de la familia "audio" (WAV).
+ * Fábrica concreta de la familia "audio".
  */
 public class AudioFactory implements MediaFactory {
     private final File directory;
+    private final String source;
 
-    public AudioFactory(File directory) {
-        this.directory = Objects.requireNonNull(directory, "directory no puede ser null");
-    }
-
-    public AudioFactory(String directoryPath) {
-        this(new File(Objects.requireNonNull(directoryPath, "directoryPath no puede ser null")));
+    public AudioFactory(String source) {
+        String audioDirectory = System.getProperty("user.home") + "/Audios";
+        this.source = source;
+        this.directory = new File(Objects.requireNonNull(audioDirectory, "directory no puede ser null"));
     }
 
     @Override
     public MediaSearcher createSearcher() {
-        return new AudioSearcher(directory);
+        return new AudioSearcher(source,directory);
     }
 
     @Override

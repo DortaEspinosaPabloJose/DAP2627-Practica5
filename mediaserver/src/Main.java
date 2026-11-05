@@ -75,19 +75,19 @@ public class Main extends JFrame {
             String format = (String) comboFormat.getSelectedItem();
             String source = (String) comboSource.getSelectedItem();
 
-            // TODO:
-            //if (format.equals("Vídeo")) { activeFactory = new VideoFactory(source); }
-             activeFactory = new AudioFactory("home/suko/Audios/");
+            // TODO: implementar videofactory
+            if (format.equals("Vídeo")) { activeFactory = new AudioFactory(source); }
+            else activeFactory = new AudioFactory(source);
 
             activeSearcher = activeFactory.createSearcher();
             List<String> results = activeSearcher.search(searchField.getText());
-            // actualizar listModel con results...
+            // TODO: actualizar listModel con results...
         });
 
         playBtn.addActionListener(e -> {
             String selected = resultList.getSelectedValue();
             if (selected != null && activeFactory != null) {
-                // TODO:
+                // TODO: reproductor
                 File mediaFile = activeSearcher.select(selected);
                 activePlayer = activeFactory.createPlayer();
                 activePlayer.play(mediaFile);
