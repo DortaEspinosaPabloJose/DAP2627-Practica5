@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 import media.fetcher.LocalMediaFetcher;
 import media.fetcher.MediaFetchException;
 import media.searcher.MediaSearcher;
+import media.searcher.TextNormalizer;
 
 /**
  * Buscador de vídeos locales (MP4) dentro del directorio de descargas.
@@ -49,7 +50,7 @@ public class LocalVideoSearcher implements MediaSearcher {
                     .map(p -> p.getFileName().toString())
                     .filter(n -> n.toLowerCase(Locale.ROOT).endsWith(EXTENSION))
                     .map(LocalVideoSearcher::stripExtension)
-                    .filter(title -> title.toLowerCase(Locale.ROOT).contains(needle))
+                    .filter(title -> TextNormalizer.matchesAll(title, query))
                     .sorted()
                     .toList();
 

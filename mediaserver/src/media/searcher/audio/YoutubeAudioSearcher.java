@@ -21,6 +21,7 @@ import media.fetcher.yt.YoutubeMediaFetcher;
 import media.fetcher.yt.YoutubeSearch;
 import media.fetcher.yt.YoutubeSearchResult;
 import media.searcher.MediaSearcher;
+import media.searcher.TextNormalizer;
 
 /**
  * Buscador de audio en YouTube. Si el título seleccionado ya existe como
@@ -79,7 +80,7 @@ public class YoutubeAudioSearcher implements MediaSearcher {
     }
 
     private Optional<File> findLocal(String title) {
-        String target = normalize(title);
+        String target = TextNormalizer.compact(title);
         if (target.isEmpty()) {
             return Optional.empty(); // título sin letras ni dígitos: evita falsos positivos
         }
@@ -88,25 +89,12 @@ public class YoutubeAudioSearcher implements MediaSearcher {
             return paths
                     .filter(Files::isRegularFile)
                     .filter(p -> p.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(EXTENSION))
-                    .filter(p -> normalize(stripExtension(p.getFileName().toString())).equals(target))
+                    .filter(p -> TextNormalizer.compact(stripExtension(p.getFileName().toString())).equals(target))
                     .map(Path::toFile)
                     .findFirst();
         } catch (IOException e) {
             throw new MediaFetchException("Error al buscar en: " + directory.getAbsolutePath(), e);
         }
-    }
-
-    /**
-     * yt-dlp sanea los nombres de fichero ("AC/DC: Thunder" no se guarda tal cual),
-     * así que se compara solo letras y dígitos, sin mayúsculas ni acentos compuestos.
-     */
-    private static String normalize(String s) {
-        String n = Normalizer.normalize(s, Normalizer.Form.NFKC).toLowerCase(Locale.ROOT);
-        StringBuilder sb = new StringBuilder(n.length());
-        n.codePoints()
-                .filter(Character::isLetterOrDigit)
-                .forEach(sb::appendCodePoint);
-        return sb.toString();
     }
 
     private static String stripExtension(String fileName) {

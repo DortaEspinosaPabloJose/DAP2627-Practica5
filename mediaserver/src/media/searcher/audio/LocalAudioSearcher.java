@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import media.fetcher.LocalMediaFetcher;
 import media.fetcher.MediaFetchException;
 import media.searcher.MediaSearcher;
+import media.searcher.TextNormalizer;
 
 /**
  * Buscador de ficheros de audio (.wav) dentro de un directorio.
@@ -49,7 +50,7 @@ public class LocalAudioSearcher implements MediaSearcher {
                     .map(p -> p.getFileName().toString())
                     .filter(n -> n.toLowerCase(Locale.ROOT).endsWith(EXTENSION))
                     .map(LocalAudioSearcher::stripExtension)
-                    .filter(title -> title.toLowerCase(Locale.ROOT).contains(needle))
+                    .filter(title -> TextNormalizer.matchesAll(title, query))
                     .sorted()
                     .toList();
             logger.log(Level.INFO, "Query: " + query + " needle: " + needle + " found: " + found);
