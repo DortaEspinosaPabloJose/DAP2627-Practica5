@@ -1,10 +1,13 @@
+import media.factory.AudioFactory;
 import media.factory.MediaFactory;
 import media.player.MediaPlayer;
 import media.searcher.MediaSearcher;
 
 import javax.swing.*;
+import java.util.List;
 import java.awt.*;
 import java.io.File;
+import java.util.Objects;
 
 public class Main extends JFrame {
 
@@ -73,22 +76,22 @@ public class Main extends JFrame {
             String format = (String) comboFormat.getSelectedItem();
             String source = (String) comboSource.getSelectedItem();
 
-            // TODO:
-            // if (format.equals("Vídeo")) { activeFactory = new VideoFactory(source); }
-            // else { activeFactory = new AudioFactory(source); }
+            // TODO: implementar videofactory
+            if (format.equals("Audio")) { activeFactory = new AudioFactory(Objects.equals(source, "Local")); }
+            // else activeFactory = new AudioFactory(source);
 
-            // activeSearcher = activeFactory.createSearcher();
-            // List<String> results = activeSearcher.search(searchField.getText());
-            // actualizar listModel con results...
+            activeSearcher = activeFactory.createSearcher();
+            List<String> results = activeSearcher.search(searchField.getText());
+            // TODO: actualizar listModel con results...
         });
 
         playBtn.addActionListener(e -> {
             String selected = resultList.getSelectedValue();
             if (selected != null && activeFactory != null) {
-                // TODO:
-                // File mediaFile = activeSearcher.select(selected);
-                // activePlayer = activeFactory.createPlayer();
-                // activePlayer.play(mediaFile);
+                // TODO: reproductor
+                File mediaFile = activeSearcher.select(selected);
+                activePlayer = activeFactory.createPlayer();
+                activePlayer.play(mediaFile);
                 statusLabel.setText("Reproduciendo: " + selected);
             }
         });
