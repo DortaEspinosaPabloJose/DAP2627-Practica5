@@ -2,7 +2,6 @@ package media.searcher;
 
 import java.io.File;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Map;
 import java.util.HashMap;
@@ -16,17 +15,17 @@ import media.fetcher.yt.YoutubeSearchResult;
 /**
  * Buscador de vídeos en YouTube y descargador a un directorio local.
  */
-public class VideoSearcher implements MediaSearcher {
+public class YoutubeVideoSearcher implements MediaSearcher {
 
     private final File directory;
     private final Map<String, YoutubeSearchResult> searchCache;
 
-    public VideoSearcher(File directory) {
+    public YoutubeVideoSearcher(File directory) {
         this.directory = Objects.requireNonNull(directory, "directory no puede ser null");
         this.searchCache = new HashMap<>();
     }
 
-    public VideoSearcher(String directoryPath) {
+    public YoutubeVideoSearcher(String directoryPath) {
         this(new File(Objects.requireNonNull(directoryPath, "directoryPath no puede ser null")));
     }
 

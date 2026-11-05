@@ -31,6 +31,7 @@ public class VideoPlayer implements MediaPlayer {
 
     @Override
     public void play(File file) {
+        this.stop();
         Objects.requireNonNull(file, "file no puede ser null");
         if (!file.isFile() || !file.canRead()) {
             throw new MediaFetchException("No se puede leer el fichero de vídeo: " + file.getAbsolutePath());
@@ -71,6 +72,17 @@ public class VideoPlayer implements MediaPlayer {
                 fxPlayer.play();
             } catch (Exception e) {
                 throw new MediaFetchException("Error al reproducir el vídeo: " + file.getName(), e);
+            }
+        });
+    }
+
+    @Override
+    public void stop() {
+        Platform.runLater(() -> {
+            if (fxPlayer != null) {
+                fxPlayer.stop();
+                fxPlayer.dispose();
+                fxPlayer = null;
             }
         });
     }
