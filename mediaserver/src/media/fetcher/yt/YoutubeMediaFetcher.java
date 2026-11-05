@@ -36,6 +36,7 @@ public class YoutubeMediaFetcher implements MediaFetcher {
         List<String> cmd = new ArrayList<>();
         cmd.add("yt-dlp");
         cmd.add("--no-playlist");
+        cmd.add("--restrict-filenames");
 
         if (format.isAudioOnly()) {
             cmd.add("-x");
@@ -43,7 +44,7 @@ public class YoutubeMediaFetcher implements MediaFetcher {
             cmd.add(format.extension());          // wav or mp3
         } else {
             cmd.add("-f");
-            cmd.add("bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b");
+            cmd.add("b[ext=mp4][vcodec^=avc]/b[ext=mp4]/b");
             cmd.add("--merge-output-format");
             cmd.add(format.extension());          // mp4
         }
